@@ -10,6 +10,7 @@
 //Has a boolean value of whether the area it represents have been hit for not. 
 
 //Non-hit squares are considered empty 
+
 export const squareUnit = {
     unit: document.createElement('div'), 
     hit: false, 
@@ -67,10 +68,11 @@ export const generateSquare = (player, area, ID) => {
     square.appendChild(display)
     */
     square.addEventListener('click', () => {
-        if (!area.hit) {
+        if (!area.hit && player.turnBoolID !== player.turnTracker.getTurnStatus() ) {
+            player.turnTracker.toggleTurn(); 
             area.hit = true;
             if (area.occupied)
-                hitOccupied(square);              
+                hitOccupied(player, square);              
             else
                 hitEmpty(square);
         }
@@ -88,7 +90,7 @@ export const hitEmpty = (square) => {
     } 
 }
 
-export const hitOccupied = (square) => {
+export const hitOccupied = (player, square) => {
     square.classList.remove('occupiedSquare');
     square.classList.add('hitOccupiedSquare');
     if (square.childNodes.length === 0) {

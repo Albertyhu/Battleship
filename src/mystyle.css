@@ -7,6 +7,17 @@ align-content: center;
     width: 100%;
     text-align: center; 
 }
+
+#messageContainer {
+width: 100%; 
+align-content: center;
+text-align: center; 
+}
+
+#turnMessage, #endGameMessage {
+text-align: center; 
+}
+
 #innerContainer {
 width: 90%; 
 height: 100%; 

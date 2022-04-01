@@ -2,11 +2,12 @@ import { createPlayer } from './player.js';
 import { generateGrid } from './grid.js'; 
 import { placeAllShips } from './placeShips.js';
 import { setSelf, setOpponent } from './computerAI.js';
+import { trackTurns } from './turnTracking.js';
 
 var playerOneTurn = true; 
-
+const turnMessage = document.getElementById('turnMessage')
 export const startGame = () => {
-    playerOneTurn = true; 
+
     const playerOne = createPlayer('player1', 'playerAreaOne', false);
     const playerTwo = createPlayer('computer', 'playerAreaTwo', false);
     setOpponent(playerOne);
@@ -14,14 +15,10 @@ export const startGame = () => {
 /*  console.log(playerOne.shipArray);
 console.log(playerOne.messages)
 console.log(playerOne.boardArray);*/
-
+    trackTurns(playerOne, playerTwo); 
     return {
         playerOne, 
-        playerTwo
+        playerTwo,
     }
 }
 
-
-export const toggleTurn = () => {
-    playerOneTurn = !playerOneTurn; 
-}

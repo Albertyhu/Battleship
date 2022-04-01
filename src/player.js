@@ -15,7 +15,16 @@ export const createPlayer = (name, container, isAI) => {
     newplayer.boardNode = null;
     newplayer.shipArray = []; 
     newplayer.name = name;
-    newplayer.messages = []; 
+    newplayer.messages = [];
+
+    //turnTracker is an object shared between players that tracks whose turn it is 
+    newplayer.turnTracker = null; 
+    //turnBoolID helps to track turns 
+    newplayer.turnBoolID = false; 
+    newplayer.setTurnTracker = (item, turnID) => {
+        newplayer.turnTracker = item; 
+        newplayer.turnBoolID = turnID; 
+    }
     newplayer.setBoardColumns = (columns) => {
         newplayer.boardColumns = columns; 
     }

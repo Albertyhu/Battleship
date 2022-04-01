@@ -47,16 +47,16 @@ export const placeShip = (player, shipType, length, gridLength) => {
         var orientation = genRandom(2);
      
         if (orientation === 1) {
-            console.log("Ship for placement: " + shipType + "; first-attempt: horizontal ")
+           // console.log("Ship for placement: " + shipType + "; first-attempt: horizontal ")
             positioned = horizThenVert(player, coordinate, ship, length, gridLength) 
         }
         else if (orientation === 2) {
-            console.log("Ship for placement: " + shipType + "; first attempt: vertical")
+           // console.log("Ship for placement: " + shipType + "; first attempt: vertical")
             positioned = vertThenHoriz(player, coordinate, ship, length, gridLength) 
         }
-        if (!positioned) {
+       /* if (!positioned) {
             console.log('Rerun loop for ' + shipType);
-        }
+        }*/
   
     }
 } 

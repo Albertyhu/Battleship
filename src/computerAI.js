@@ -14,5 +14,5 @@ export const setSelf = (player) => {
 
 export const setOpponent = (player) => {
     memory.opponent = player; 
-    opponent_columns = player.getBoardColumns(); 
+    memory.opponent_columns = player.getBoardColumns(); 
 }
