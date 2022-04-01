@@ -5,26 +5,36 @@
 export const ship = {
     length: 0,
     isSunk: false, 
-    x: 0,
-    y: 0,
-    getX() {
-        return this.x; 
-    },
-    getY() {
-        return this.y; 
-    },
-    setPos(x, y) {
-        this.x = x; 
-        this.y = y; 
+    posArray: [], 
+    type: '', 
+    setPos(x_coor, y_coor) {
+        this.posArray.push({x: x_coor, y: y_coor})
+    }, 
+}
+
+//This method doesn't work because for some reason, each ship was recording every ships positions. 
+//A revised version is written below.
+/*
+export const createShip = (length, type) => {
+    const newShip = Object.create(ship);
+    newShip.length = length; 
+    newShip.type = type; 
+    return newShip;
+}*/
+
+export const createShip = (length, type) => {
+    const newShip = new Object(); 
+    newShip.length = length; 
+    newShip.type = type; 
+    newShip.isSunk = false;
+    newShip.posArray = [];
+    newShip.setPos = (x_coor, y_coor) =>{
+        newShip.posArray.push({ x: x_coor, y: y_coor })
     }
+    return newShip;
 }
 
-export const createShip = (length, position) => {
-    let ship = Object.create(ship);
-    ship.length = length; 
-    return ship;
-}
-
+/*
 export const createCarrier = (position) => {
     return createShip(5, position); 
 }
@@ -44,3 +54,4 @@ export const createSubmarine = (position) => {
 export const createPatrol = (position) => {
     return createShip(2, position); 
 }
+*/

@@ -9,14 +9,6 @@
 //contains x,y coordinates 
 //Has a boolean value of whether the area it represents have been hit for not. 
 
-export const grid = {
-    element: document.createElement('div'),
-    setGrid() {
-        this.element.setAttribute('class', 'grid')
-    }
-
-}
-
 //Non-hit squares are considered empty 
 export const squareUnit = {
     unit: document.createElement('div'), 
@@ -25,49 +17,84 @@ export const squareUnit = {
    
 }
 
-export const generateGrid = (columns) => {
-    var newgrid = Object.create(grid); 
-    newgrid.setGrid(); 
+export const generateGrid = (columns, player) => {
+    var newgrid = document.createElement('div')
+    player.setBoardColumns(columns);
+    newgrid.setAttribute('class', 'grid')
     if (columns < 10) {
         columns = 10; 
     }
-    generateRow(newgrid.element, columns, columns); 
-    return newgrid.element; 
+    generateRow(newgrid, columns, columns, player); 
+    return newgrid; 
 }
 
-export const generateRow = (targetGrid, column, count) => {
+//This function not only generates the rows of the grid, 
+//but is also responsible for generating the squares for holding important information such as whether or not a square is empty 
+export const generateRow = (targetGrid, column, count, player) => {
     if (count > 0) {
         const row = document.createElement('div'); 
         row.setAttribute('class', 'row'); 
         for (var i = 1; i <= column; i++) {
-            const newID = i + ',' + count; 
-            row.appendChild(generateSquare(newID.toString()));
+            const coordinate = i + ',' + count;
+            const area = {
+                coordinate, 
+                x: i,
+                y: count, 
+                hit: false, 
+                occupied: false, 
+            }
+            player.boardArray.push(area); 
+            row.appendChild(generateSquare(player, player.boardArray[player.boardArray.length - 1], coordinate.toString()));
         }
         row.setAttribute('class', 'row'); 
         targetGrid.appendChild(row);
-        generateRow(targetGrid, column, count - 1)
+        generateRow(targetGrid, column, count - 1, player)
         
     }
    
 }
 
-export const generateSquare = (ID) => {
+export const generateSquare = (player, area, ID) => {
     const square = document.createElement('div'); 
     square.setAttribute('class', 'emptySquare'); 
-    square.setAttribute('id', ID); 
+    square.setAttribute('id', player.name + "-" + ID); 
+
+    //to show the coordinates on render
+    /*
+    const display = document.createElement('p');
+    display.style.margin = 'auto'; 
+    display.innerHTML = ID; 
+    square.appendChild(display)
+    */
     square.addEventListener('click', () => {
-        hitEmpty(square); 
+        if (!area.hit) {
+            area.hit = true;
+            if (area.occupied)
+                hitOccupied(square);              
+            else
+                hitEmpty(square);
+        }
     })
+  
     return square; 
 }
 
 export const hitEmpty = (square) => {
     square.classList.toggle('hitEmptySquare');
-    //square.classList.remove('emptySquare');
-    //square.classList.add('hitEmptySquare');
     if (square.childNodes.length === 0) {
         const dot = document.createElement('div');
         dot.setAttribute('class', 'dot')
         square.appendChild(dot);
     } 
 }
+
+export const hitOccupied = (square) => {
+    square.classList.remove('occupiedSquare');
+    square.classList.add('hitOccupiedSquare');
+    if (square.childNodes.length === 0) {
+        const dot = document.createElement('div');
+        dot.setAttribute('class', 'dot')
+        square.appendChild(dot);
+    }
+}
+

@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\dist",
-    "\\src"
+    "\\src",
+    "\\src\\tests"
   ],
-  "SelectedNode": "\\src\\grid.js",
+  "SelectedNode": "\\src\\home.html",
   "PreviewInSolutionExplorer": false
 }

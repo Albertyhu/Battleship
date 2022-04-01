@@ -1,4 +1,55 @@
-div.emptySquare{
+#container {
+width: 100%; 
+height: 100%; 
+align-content: center;
+}
+#titleContainer {
+    width: 100%;
+    text-align: center; 
+}
+#innerContainer {
+width: 90%; 
+height: 100%; 
+margin: auto; 
+justify-content: space-between;
+display: flex; 
+}
+
+#p1Zone, #p2Zone {
+    display: block;
+    text-align: center;
+}
+
+#p1Zone {
+}
+
+#p2Zone {
+
+}
+
+#player1Area, #player2Area {
+}
+
+#player1Area {
+}
+
+#player2Area {
+}
+
+#buttonContainer {
+    margin-top: 20px;
+text-align: center; 
+align-content: center; 
+}
+
+#startOverButton {
+    font-family: Verdana; 
+    background-color: #cccccc;
+    padding: 10px; 
+    border-radius: 5px;
+}
+
+div.emptySquare {
     width: 50px;
     height: 50px;
     display: block;
@@ -16,16 +67,48 @@ div.emptySquare{
     height: 52px;
     display: block;
     margin: 0;
-    background-color: #7fffd4;
+    background-color: #6795ff;
     justify-content: center;
     align-content: center;
 
 }
 
+.hitEmptySquare:hover {
+    background-color: #7fffd4;
+}
+
+.hitOccupiedSquare {
+    width: 50px;
+    height: 50px;
+    display: block;
+    margin: 0;
+    border: 1px solid #b0b0b0;
+    align-content: center;
+    background-color: #ff0000;
+}
+
+.hitOccupiedSquare:hover {
+    background-color: #ff0000;
+}
+
+.occupiedSquare {
+    width: 50px;
+    height: 50px;
+    display: block;
+    margin: 0;
+    border: 1px solid #b0b0b0;
+    align-content: center;
+    background-color: #50aa00; 
+}
+
+.occupiedSquare:hover {
+    background-color: #50aa00;
+}
+
 .row {
-width: 100%; 
-height: 100%; 
-display: flex; 
+    width: 100%;
+    height: 100%;
+    display: flex;
 }
 
 .grid {
