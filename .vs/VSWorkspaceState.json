@@ -3,8 +3,9 @@
     "",
     "\\dist",
     "\\src",
-    "\\src\\tests"
+    "\\src\\tests",
+    "\\src\\tests\\oldTests"
   ],
-  "SelectedNode": "\\src\\home.html",
+  "SelectedNode": "\\src\\tests\\computerAI.test.js",
   "PreviewInSolutionExplorer": false
 }

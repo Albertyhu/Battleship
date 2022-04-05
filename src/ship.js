@@ -23,8 +23,24 @@ export const createShip = (length, type) => {
     newShip.isSunk = false;
     newShip.posArray = [];
     newShip.setPos = (x_coor, y_coor) =>{
-        newShip.posArray.push({ x: x_coor, y: y_coor })
+        newShip.posArray.push({ x: x_coor, y: y_coor, isHit: false })
     }
     return newShip;
 }
 
+export const isShipSunk = (player, ship) => {
+    var isSunk = true;
+    ship.posArray.forEach(pos => {
+        //if at least one part of the ship is not hit, isSunk is false; 
+        if (!pos.isHit) {
+            isSunk = false;
+        }
+    })
+    if (isSunk) {
+        const announcement = document.getElementById('announcement');
+        const message = player.name + "'s " + ship.type + " has been sunk!"; 
+        announcement.innerHTML = message; 
+    }
+  
+    return isSunk;
+}

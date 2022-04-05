@@ -1,9 +1,14 @@
+import { runAI } from './computerAI.js'; 
+
 export const trackTurns = (playerOne, playerTwo) => {
     const keepTrack = new Object();
     keepTrack.playerOneTurn = true;
     keepTrack.toggleTurn = () => {
         keepTrack.playerOneTurn = !keepTrack.playerOneTurn;
         keepTrack.displayTurn();
+        if (playerTwo.isComputer && !keepTrack.playerOneTurn) {
+            runAI(playerTwo); 
+        }
     }
     (keepTrack.displayTurn = () => {
         if (keepTrack.playerOneTurn) {

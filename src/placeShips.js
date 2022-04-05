@@ -226,8 +226,8 @@ export const isItOccuppied = (player, coordinate, length, horizontal) => {
             })
         }
     }
-    const message = '(' + coordinate.x + "," + coordinate.y + ") " + isOccupied + "; horizontal: " + horizontal + "; Length: " + length; 
-    player.messages.push(message);
+  //  const message = '(' + coordinate.x + "," + coordinate.y + ") " + isOccupied + "; horizontal: " + horizontal + "; Length: " + length; 
+   // player.messages.push(message);
     return isOccupied;
 }
 

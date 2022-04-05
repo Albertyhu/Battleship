@@ -8,13 +8,27 @@ import { generateGrid } from './grid.js';
 import { placeAllShips } from './placeShips.js';
 
 
-export const createPlayer = (name, container, isAI) => {
+export const createPlayer = (name, opponent, container, isAI) => {
     const newplayer = new Object();
     newplayer.boardArray = [];
     newplayer.boardColumns = 0; 
     newplayer.boardNode = null;
+
+    newplayer.gameObject = null; 
+    newplayer.setGameObject = game => {
+        newplayer.gameObject = game; 
+    }
+
+    //Array of all the player's ships
     newplayer.shipArray = []; 
     newplayer.name = name;
+    newplayer.opponentName = opponent; 
+    newplayer.opponent = null; 
+    newplayer.setOpponent = opponent => {
+        newplayer.opponent = opponent; 
+    }
+    newplayer.isComputer = isAI; 
+
     newplayer.messages = [];
 
     //turnTracker is an object shared between players that tracks whose turn it is 
@@ -51,6 +65,8 @@ export const createPlayer = (name, container, isAI) => {
     const playerArea = document.getElementById(container);
     playerArea.appendChild(generateGrid(10, newplayer));
     placeAllShips(newplayer, 10)
+
+
 
     return newplayer; 
 }
