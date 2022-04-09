@@ -12,7 +12,8 @@
 //Non-hit squares are considered empty 
 
 import { isShipSunk } from './ship.js'; 
-import {checkShips} from './winCondition.js';
+import { checkShips } from './winCondition.js';
+import { isAreaSecure } from './computerAI.js'; 
 
 export const squareUnit = {
     unit: document.createElement('div'), 
@@ -64,19 +65,20 @@ export const generateSquare = (player, area, ID) => {
     square.setAttribute('id', player.name + "-" + ID); 
 
     //to show the coordinates on render
-    /*
+    
     const display = document.createElement('p');
     display.style.margin = 'auto'; 
     display.innerHTML = ID; 
     square.appendChild(display)
-    */
+    
     square.addEventListener('click', () => {
         //turnTracker keeps track of the player's turn everytime they attempt to hit each other's ships
         //If the player hits one of the opponent's ship, he gets another turn.
         if (!area.hit && player.turnBoolID !== player.turnTracker.getTurnStatus() && !player.gameObject.over && !player.isAI) {
             area.hit = true;
-            if (area.occupied)
+            if (area.occupied) {
                 hitOccupied(player, square, area.x, area.y);
+            }
             else {
                 hitEmpty(square);
                 player.turnTracker.toggleTurn(); 
@@ -111,6 +113,11 @@ export const hitOccupied = (player, square, x_coor, y_coor) => {
             if (pos.x === x_coor && pos.y === y_coor) {
                 pos.isHit = true; 
                 ship.isSunk = isShipSunk(player, ship); 
+                //if the player is playing against the AI, this notifies the AI of important info
+                //...about ship and the coordinates of the confirmed damage location 
+                if (player.isPlayingAgainstAI && ship.isSunk) {
+                    isAreaSecure(ship, x_coor, y_coor)
+                }
             }
         })
     })

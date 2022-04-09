@@ -1,9 +1,9 @@
 import { createPlayer } from './player.js'; 
 import { generateGrid } from './grid.js'; 
 import { placeAllShips } from './placeShips.js';
-import { setSelf, setOpponent } from './computerAI.js';
+import { setSelf, setOpponent, getOpponentShips } from './computerAI.js';
 import { trackTurns } from './turnTracking.js';
-import { runAI } from './computerAI.js'; 
+import { runAI, getOpponent } from './computerAI.js'; 
 
 var playerOneTurn = true; 
 const turnMessage = document.getElementById('turnMessage')
@@ -26,6 +26,9 @@ export const startGame = () => {
     trackTurns(playerOne, playerTwo);
     if (playerTwo.isComputer) {
         playerTwo.setOpponent(playerOne);
+        getOpponent(playerOne)
+        playerOne.isPlayingAgainstAI = true; 
+        getOpponentShips(); 
         runAI(playerTwo);
     }
 

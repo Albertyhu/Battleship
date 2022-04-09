@@ -13,7 +13,7 @@ export const createPlayer = (name, opponent, container, isAI) => {
     newplayer.boardArray = [];
     newplayer.boardColumns = 0; 
     newplayer.boardNode = null;
-
+    
     newplayer.gameObject = null; 
     newplayer.setGameObject = game => {
         newplayer.gameObject = game; 
@@ -28,7 +28,7 @@ export const createPlayer = (name, opponent, container, isAI) => {
         newplayer.opponent = opponent; 
     }
     newplayer.isComputer = isAI; 
-
+    newplayer.isPlayingAgainstAI = false; 
     newplayer.messages = [];
 
     //turnTracker is an object shared between players that tracks whose turn it is 

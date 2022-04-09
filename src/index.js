@@ -6,6 +6,7 @@ import { startGame, trackTurns } from './gameLoop.js';
 import { delBoard } from './reset.js';
 //import { generateCoordinates } from './placeShips.js';
 
+
 //for watching the html file 
 require('./home.html')
 
