@@ -80,15 +80,13 @@ export const hitOpponentArea = (player) => {
                         incrementHitCount(); 
                         attackArea = true;
                         console.log("confirmed hit: " + coordinates.x + "," + coordinates.y)
-                     //   clearNextTarget();
                         memory.confirmedHits.push({x: coordinates.x, y: coordinates.y})
 
-                        //enemy ship was hit for the first time, record the location 
-                        //orientation of ship is not known yet 
-                        //this part is problematic 
+                        //If AI has the next targets based on a location of a confirmed hit
                         if (memory.nextTarget.length !==0 && memory.nextTarget.length !== undefined) {
                             horizOrVert(coordinates.x, coordinates.y)
                         }
+                        //If AI doesn't have any clue as to the locations of the enemy ships
                         else {
                             //Enter coordinates of adjacent squares into nextTarget[] 
                             chooseValidPotentialTarget(coordinates.x, coordinates.y);
@@ -126,45 +124,6 @@ export const hitOpponentArea = (player) => {
         }
     }
 }
-
-
-//original hitOpponentArea function for testing purposes 
-/*
-export const hitOpponentArea = (player) => {
-    var attackArea = false;
-    while (!attackArea) {
-        var coordinates = generateCoordinates(10);
-        for (var i = 0; i < memory.opponent.boardArray.length; i++) {
-            if (coordinates.x === memory.opponent.boardArray[i].x && coordinates.y === memory.opponent.boardArray[i].y) {
-                if (!memory.opponent.boardArray[i].hit) {
-                    memory.currentTarget = { x: coordinates.x, y: coordinates.y };
-                    //if area does contain the enemy ship 
-                    const square = getSquare(memory.opponent.name, coordinates.x, coordinates.y)
-                    if (memory.opponent.boardArray[i].occupied) {
-                        hitOccupied(memory.opponent, square, coordinates.x, coordinates.y);
-                        memory.previousTarget = { x: coordinates.x, y: coordinates.y };
-                        incrementHitCount();
-                        attackArea = false;
-                    }
-                    else {
-                        hitEmpty(square);
-                        clearItem(coordinates.x, coordinates.y);
-                        player.turnTracker.toggleTurn();
-                        resetHitCounts();
-                        attackArea = true;
-                    }
-                    memory.opponent.boardArray[i].hit = true;
-                }
-                //if the area has already been hit. 
-                else {
-                    attackArea = false;
-                }
-            }
-        }
-    }
-}
-*/
-
 
 export const getSquare = (player, x, y) => {
     const squareID = player + "-" + x + "," + y;
@@ -277,11 +236,13 @@ const horizOrVert = (x_coor, y_coor) => {
             //Howver, if the current attack was not followed up by announcement of a sunk ship 
             //...add coordinates of the square that is adjacent to the location of the initial attack of the ship to nextTarget
                 else {
-                    attackTheOtherEnd(x_coor, y_coor)
+                    //attackTheOtherEnd(x_coor, y_coor)
+                    addOtherEnd(memory.previousTarget.x - 1, memory.previousTarget.y, true, false)
                 }
             }
             else {
-                attackTheOtherEnd(x_coor, y_coor)
+                //attackTheOtherEnd(x_coor, y_coor)
+                addOtherEnd(memory.previousTarget.x - 1, memory.previousTarget.y, true, false)
             }
         }
         //go left
@@ -295,11 +256,12 @@ const horizOrVert = (x_coor, y_coor) => {
             //Howver, if the current attack was not followed up by announcement of a sunk ship 
             //...add coordinates of the square that is adjacent to the location of the initial attack of the ship to nextTarget
                 else {
-                    attackTheOtherEnd(x_coor, y_coor)
+                  //  attackTheOtherEnd(x_coor, y_coor)
                 }
             }
             else {
-                attackTheOtherEnd(x_coor, y_coor)
+               // attackTheOtherEnd(x_coor, y_coor)
+                addOtherEnd(memory.previousTarget.x + 1, memory.previousTarget.y, true, true)
             }
         }
     }
@@ -318,11 +280,13 @@ const horizOrVert = (x_coor, y_coor) => {
                 //Howver, if the current attack was not followed up by announcement of a sunk ship 
                 //...add coordinates of the square that is adjacent to the location of the initial attack of the ship to nextTarget
                 else {
-                    attackTheOtherEnd(x_coor, y_coor)
+                   // attackTheOtherEnd(x_coor, y_coor)
+                    addOtherEnd(memory.previousTarget.x, memory.previousTarget.y + 1, false, true)
                 }
             }
             else {
-                attackTheOtherEnd(x_coor, y_coor)
+               // attackTheOtherEnd(x_coor, y_coor)
+                addOtherEnd(memory.previousTarget.x, memory.previousTarget.y + 1, false, true)
             }
         }
         //go up
@@ -336,11 +300,13 @@ const horizOrVert = (x_coor, y_coor) => {
                 //Howver, if the current attack was not followed up by announcement of a sunk ship 
                 //...add coordinates of the square that is adjacent to the location of the initial attack of the ship to nextTarget
                 else {
-                    attackTheOtherEnd(x_coor, y_coor)
+                   // attackTheOtherEnd(x_coor, y_coor)
+                    addOtherEnd(memory.previousTarget.x, memory.previousTarget.y - 1, false, false)
                 }
             }
             else {
-                attackTheOtherEnd(x_coor, y_coor)
+               // attackTheOtherEnd(x_coor, y_coor)
+                addOtherEnd(memory.previousTarget.x, memory.previousTarget.y - 1, false, false)
             }
         }
     }
@@ -382,58 +348,6 @@ export const isAreaSecure = (sunkShip, x_coor, y_coor) => {
     }
     resetHitCounts ()
 }
-
-/*
-const attackTheOtherEnd = (x_coor, y_coor) => {
-    //if the attack pattern was horizontal
-    if (memory.isHoriz) {
-        var newX = x_coor; 
-        var newY = y_coor; 
-        //if the computer's target was moving right, change the direction of the attack to the left
-        if (x_coor > memory.previousTarget.x) {
-            newX = x_coor - (memory.hitCounts)
-            memory.previousTarget.x = newX + 1;
-        }
-        //vice versa 
-        else if (x_coor < memory.previousTarget.x) {
-            newX = x_coor + (memory.hitCounts)
-            memory.previousTarget.x = newX- 1;
-        }
-    }
-    //if the attack pattern was vertical 
-    else {
-        //if the computer's target was moving upward, change the direction of the attack downward
-        if (y_coor > memory.previousTarget.y) {
-            newY = y_coor - (memory.hitCounts)
-            memory.previousTarget.y = newY + 1;
-        }
-        //vice versa 
-        else if (y_coor < memory.previousTarget.y) {
-            newY = y_coor + (memory.hitCounts)
-            memory.previousTarget.y = newY - 1;
-        }
-    }
-    //empty nextTarget[]
-
-    //check to see if the other end is valid 
-    var shouldAttackOtherEnd = false; 
-    if (newX > 0 && newX <= memory.opponent.boardColumns && newY > 0 && newY <= memory.opponent.boardColumns) {
-        for (var i = 0; i < memory.opponent.boardArray.length; i++) {
-            if (memory.opponent.boardArray[i].x === newX && memory.opponent.boardArray[i].y === newY) {
-                if (!memory.opponent.boardArray[i].hit) {
-                    shouldAttackOtherEnd = true; 
-            }
-            }
-        }
-    }
-    if (shouldAttackOtherEnd) {
-        clearNextTarget();
-        console.log("Attack the other end: " + newX + "," + newY)
-        memory.nextTarget.push({ x: newX, y: newY })
-        resetHitCounts();
-    }
-}*/
-
 
 const attackTheOtherEnd = (x_coor, y_coor) => {
     //if the attack pattern was horizontal
@@ -492,7 +406,6 @@ const attackTheOtherEnd = (x_coor, y_coor) => {
                 foundCons = false; 
             }
         }
-     //   clearNextTarget(); 
         memory.nextTarget.push({ x: consecutiveX, y: consecutiveY })
         console.log("Attack the other end: " + consecutiveX + "," + consecutiveY)
     }
@@ -521,11 +434,6 @@ const identifyOrientation = (x_coor, y_coor) => {
     }
 }
 
-const checkTheOtherEnd = (x_coor, y_coor) => {
-    clearNextTarget(); 
-    
-}
-
 const chooseTargetBasedOnOrientation = (x_coor, y_coor) => {
     //Every time an attack hits an enemy ship,
     //...check to see if it has been hit more than one time.
@@ -544,7 +452,6 @@ const chooseTargetBasedOnOrientation = (x_coor, y_coor) => {
         }
     }
 }
-
 
 const addOtherEnd = (x_coor, y_coor, isHorizontal, isClimbing) => {
     //end conditions:
