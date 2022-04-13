@@ -72,8 +72,10 @@ export const generateSquare = (player, area, ID) => {
     
     square.addEventListener('click', () => {
         //turnTracker keeps track of the player's turn everytime they attempt to hit each other's ships
-        //If the player hits one of the opponent's ship, he gets another turn.
-        if (!area.hit && player.turnBoolID !== player.turnTracker.getTurnStatus() && !player.gameObject.over && !player.isAI) {
+        var turnStatus = player.turnTracker.getTurnStatus(); 
+
+        //This part needs further work if the player chooses to play with another oppponent other than the computer 
+        if (!area.hit && player.turnBoolID !== turnStatus && !player.gameObject.over && player.isComputer) {
             area.hit = true;
             playCannonAudio(); 
             if (area.occupied) {

@@ -69,7 +69,8 @@ const updateHitCount = () => {
 
 export const runAI = (player) => {
     if(!player.turnTracker.getTurnStatus()) {
-        hitOpponentArea(player);
+        setTimeout(() => { hitOpponentArea(player) }, 2000);
+      //  hitOpponentArea(player) 
     }
   
 }

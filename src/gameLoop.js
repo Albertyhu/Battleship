@@ -22,8 +22,8 @@ export const startGame = () => {
     //The following two lines is a way to let both player objects know if a winner is announced. 
     playerOne.setGameObject(newGame);
     playerTwo.setGameObject(newGame);
-
     trackTurns(playerOne, playerTwo);
+
     if (playerTwo.isComputer) {
         playerTwo.setOpponent(playerOne);
         getOpponent(playerOne)
@@ -31,6 +31,7 @@ export const startGame = () => {
         getOpponentShips(); 
         runAI(playerTwo);
     }
+   
 
     document.getElementById('announcement').innerHTML = '';
     document.getElementById('endGameMessage').innerHTML = '';

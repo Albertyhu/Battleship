@@ -3,11 +3,6 @@ import Cannon2 from './audio/cannon-shot-2.mp3';
 import Cannon3 from './audio/cannon-shot-3.mp3';
 import { genRandom } from './randGen.js';
 
-
-
-
-
-
 function playCannon1() {
     const CannonOne = new Audio(Cannon1);
     CannonOne.play(); 
