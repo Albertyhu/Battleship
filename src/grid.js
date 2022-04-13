@@ -14,22 +14,7 @@
 import { isShipSunk } from './ship.js'; 
 import { checkShips } from './winCondition.js';
 import { isAreaSecure } from './computerAI.js'; 
-
-/*
-import Cannon1 from './audio/cannon-shot-1.mp3'; 
-import Cannon2 from './audio/cannon-shot-2.mp3'; 
-import Cannon3 from './audio/cannon-shot-3.mp3'; 
-import { genRandom } from './randGen.js';
-
-const CannonOne = new Audio(Cannon1);
-const CannonTwo = new Audio(Cannon2);
-const CannonThree = new Audio(Cannon3);
-const audioArray = [CannonOne, CannonTwo, CannoThree]
-const playAudio = () => {
-    var choose = genRandom(3) - 1;
-    audioArray[choose].play();
-}
-*/
+import { playCannonAudio } from './playCannonAudio.js';
 
 export const squareUnit = {
     unit: document.createElement('div'), 
@@ -90,7 +75,7 @@ export const generateSquare = (player, area, ID) => {
         //If the player hits one of the opponent's ship, he gets another turn.
         if (!area.hit && player.turnBoolID !== player.turnTracker.getTurnStatus() && !player.gameObject.over && !player.isAI) {
             area.hit = true;
-            playAudio(); 
+            playCannonAudio(); 
             if (area.occupied) {
                 hitOccupied(player, square, area.x, area.y);
             }

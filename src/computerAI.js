@@ -2,6 +2,7 @@ import { genRandom } from './randGen.js';
 import { generateCoordinates } from './placeShips'; 
 import { hitEmpty, hitOccupied } from './grid.js';
 import { isUndefined } from 'lodash';
+import { playCannonAudio } from './playCannonAudio.js';
 
 //It only needs to keep track of the opponent's ships and board 
 //randomly picks coordinates. 
@@ -143,6 +144,7 @@ export const hitOpponentArea = (player) => {
             }
         }
     }
+    playCannonAudio(); 
 }
 
 export const getSquare = (player, x, y) => {

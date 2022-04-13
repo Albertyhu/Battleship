@@ -7,8 +7,8 @@ export const trackTurns = (playerOne, playerTwo) => {
         keepTrack.playerOneTurn = !keepTrack.playerOneTurn;
         keepTrack.displayTurn();
         if (playerTwo.isComputer && !keepTrack.playerOneTurn) {
-          //  setTimeout(() => { runAI(playerTwo) }, 2000); 
-            runAI(playerTwo)
+            setTimeout(() => { runAI(playerTwo) }, 2000); 
+          //  runAI(playerTwo)
         }
     }
     (keepTrack.displayTurn = () => {
