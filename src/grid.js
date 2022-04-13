@@ -15,6 +15,22 @@ import { isShipSunk } from './ship.js';
 import { checkShips } from './winCondition.js';
 import { isAreaSecure } from './computerAI.js'; 
 
+/*
+import Cannon1 from './audio/cannon-shot-1.mp3'; 
+import Cannon2 from './audio/cannon-shot-2.mp3'; 
+import Cannon3 from './audio/cannon-shot-3.mp3'; 
+import { genRandom } from './randGen.js';
+
+const CannonOne = new Audio(Cannon1);
+const CannonTwo = new Audio(Cannon2);
+const CannonThree = new Audio(Cannon3);
+const audioArray = [CannonOne, CannonTwo, CannoThree]
+const playAudio = () => {
+    var choose = genRandom(3) - 1;
+    audioArray[choose].play();
+}
+*/
+
 export const squareUnit = {
     unit: document.createElement('div'), 
     hit: false, 
@@ -53,10 +69,8 @@ export const generateRow = (targetGrid, column, count, player) => {
         }
         row.setAttribute('class', 'row'); 
         targetGrid.appendChild(row);
-        generateRow(targetGrid, column, count - 1, player)
-        
+        generateRow(targetGrid, column, count - 1, player)   
     }
-   
 }
 
 export const generateSquare = (player, area, ID) => {
@@ -65,27 +79,28 @@ export const generateSquare = (player, area, ID) => {
     square.setAttribute('id', player.name + "-" + ID); 
 
     //to show the coordinates on render
-    
+  /*
     const display = document.createElement('p');
     display.style.margin = 'auto'; 
     display.innerHTML = ID; 
-    square.appendChild(display)
+    square.appendChild(display)*/
     
     square.addEventListener('click', () => {
         //turnTracker keeps track of the player's turn everytime they attempt to hit each other's ships
         //If the player hits one of the opponent's ship, he gets another turn.
         if (!area.hit && player.turnBoolID !== player.turnTracker.getTurnStatus() && !player.gameObject.over && !player.isAI) {
             area.hit = true;
+            playAudio(); 
             if (area.occupied) {
                 hitOccupied(player, square, area.x, area.y);
             }
             else {
                 hitEmpty(square);
-                player.turnTracker.toggleTurn(); 
+
             }
+            player.turnTracker.toggleTurn(); 
         }
     })
-  
     return square; 
 }
 
@@ -99,7 +114,12 @@ export const hitEmpty = (square) => {
 }
 
 export const hitOccupied = (player, square, x_coor, y_coor) => {
-    square.classList.remove('occupiedSquare');
+    if (player.isComputer) {
+        square.classList.remove('hitEmptySquare');
+    }
+    else {
+        square.classList.remove('occupiedSquare');
+    }
     square.classList.add('hitOccupiedSquare');
     if (square.childNodes.length === 0) {
         const dot = document.createElement('div');
@@ -109,6 +129,7 @@ export const hitOccupied = (player, square, x_coor, y_coor) => {
  
     var targeted_ship = null; 
     player.shipArray.forEach(ship => {
+        ship.hasBeenHit = true; 
         ship.posArray.forEach(pos => {
             if (pos.x === x_coor && pos.y === y_coor) {
                 pos.isHit = true; 

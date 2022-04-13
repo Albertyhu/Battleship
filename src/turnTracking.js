@@ -7,14 +7,17 @@ export const trackTurns = (playerOne, playerTwo) => {
         keepTrack.playerOneTurn = !keepTrack.playerOneTurn;
         keepTrack.displayTurn();
         if (playerTwo.isComputer && !keepTrack.playerOneTurn) {
-            runAI(playerTwo); 
+          //  setTimeout(() => { runAI(playerTwo) }, 2000); 
+            runAI(playerTwo)
         }
     }
     (keepTrack.displayTurn = () => {
         if (keepTrack.playerOneTurn) {
+            console.log("Player one's turn")
             turnMessage.innerHTML = "Player One's Turn";
         }
         else {
+            console.log("Player two's turn")
             turnMessage.innerHTML = "Player Two's Turn";
         }
     })()

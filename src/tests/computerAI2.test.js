@@ -69,12 +69,21 @@ const createPlayer = (name, isAI) => {
                 newplayer.placeShip(x, y - 1, length - 1, isHoriz, shipName)
             }
         }
-   } 
+    } 
+
+    newplayer.hitArea = (x, y) => {
+        for (var i = 0; i < newplayer.boardArray.length; i++) {
+            if (newplayer.boardArray[i].x === x && newplayer.boardArray[i].y === y) {
+                newplayer.boardArray[i].hit = true; 
+            }
+        }
+    }
     return newplayer;
 }
 
 const memory = {
     nextTarget: [],
+    nextSecondaryTarget: [], 
     hitTarget: [],
 
     //keeps track of previous target; 
@@ -125,7 +134,7 @@ function generateRow(column, count, player) {
 }
 
 
-const horizOrVert1 = (x_coor, y_coor) => {
+const horizOrVert = (player, x_coor, y_coor) => {
    // console.log('HorizORVert x = ' + x_coor + "; y = " + y_coor)
     //if y coordinates are the same, it's horizontal
     if (memory.previousTarget.y === y_coor) {
@@ -136,28 +145,20 @@ const horizOrVert1 = (x_coor, y_coor) => {
             if (x_coor + 1 <= 10) {
                 if (!hasAlreadyBeenAttacked(x_coor + 1, y_coor)) {
                     memory.nextTarget.push({ x: x_coor + 1, y: y_coor, isHoriz: true })
-                }
-                else {
-                    attackTheOtherEnd()
+
                 }
             }
-            else {
-                attackTheOtherEnd()
-            }
+            addOtherEnd(player, memory.previousTarget.x - 1, memory.previousTarget.y, true, false); 
         }
         //go left
         else if (x_coor < memory.previousTarget.x) {
             if (x_coor - 1 > 0) {
                 if (!hasAlreadyBeenAttacked(x_coor - 1, y_coor)) {
                     memory.nextTarget.push({ x: x_coor - 1, y: y_coor, isHoriz: true })
-                }
-                else {
-                    attackTheOtherEnd()
+                    addOtherEnd()
                 }
             }
-            else {
-                attackTheOtherEnd()
-            }
+            addOtherEnd(player, memory.previousTarget.x + 1, memory.previousTarget.y, true, true)
         }
     }
     //if x coordinates are the same, it's vertical 
@@ -169,14 +170,10 @@ const horizOrVert1 = (x_coor, y_coor) => {
             if (y_coor - 1 > 0) {
                 if (!hasAlreadyBeenAttacked(x_coor, y_coor - 1)) {
                     memory.nextTarget.push({ x: x_coor, y: y_coor - 1, isHoriz: false })
-                }
-                else {
-                    attackTheOtherEnd()
+    
                 }
             }
-            else {
-                attackTheOtherEnd()
-            }
+            addOtherEnd(player, memory.previousTarget.x, memory.previousTarget.y + 1, false, true)
         }
         //go up
         else if (y_coor > memory.previousTarget.y) {
@@ -184,22 +181,53 @@ const horizOrVert1 = (x_coor, y_coor) => {
                 if (!hasAlreadyBeenAttacked(x_coor, y_coor + 1)) {
                     memory.nextTarget.push({ x: x_coor, y: y_coor + 1, isHoriz: false })
                 }
-                else {
-                    attackTheOtherEnd()
-                }
             }
-            else {
-                attackTheOtherEnd()
-            }
+            addOtherEnd(player, memory.previousTarget.x, memory.previousTarget.y - 1, false, false)
         }
     }
 
     memory.nextTarget.forEach((item, index, object) => {
         if (memory.isHoriz !== item.isHoriz) {
-            object.splice(index, 1);
+            memory.nextSecondaryTarget.push(object.splice(index, 1));
         }
     })
     
+}
+
+const addOtherEnd = (player, x_coor, y_coor, isHorizontal, isClimbing) => {
+    //end conditions:
+    //It comes upon a square that has not been attacked
+    //it comes upon the edge of the map 
+    var moveX = 0;
+    var moveY = 0;
+    if (isHorizontal && isClimbing && x_coor <= 10) {
+        moveX = 1;
+    }
+    else if (isHorizontal && !isClimbing && x_coor > 0) {
+        moveX = -1;
+    }
+    else if (!isHorizontal && isClimbing && y_coor <= 10) {
+        moveY = 1;
+    }
+    else if (!isHorizontal && !isClimbing && y_coor > 0) {
+        moveY = -1;
+    }
+
+    for (var i = 0; i < player.boardArray.length; i++) {
+        if (player.boardArray[i].x === x_coor && player.boardArray[i].y === y_coor) {
+            if (player.boardArray[i].hit && player.boardArray[i].occupied) {
+                console.log("Add Other End Recursion: " + x_coor + moveX + "," + y_coor + moveY)
+                addOtherEnd(x_coor + moveX, y_coor + moveY, isHorizontal, isClimbing)
+            }
+            else if (player.boardArray[i].hit && !player.boardArray[i].occupied) {
+                //do nothing
+            }
+            else {
+                memory.nextTarget.push({ x: x_coor, y: y_coor, isHoriz: isHorizontal })
+                console.log("addOtherEnd: " + x_coor + "," + y_coor)
+            }
+        }
+    }
 }
 
 const confirmShipExistence = (player, x_coor, y_coor, length, isHoriz, arr) => {
@@ -270,11 +298,24 @@ const decideTarget = () => {
     }
     //If AI doesn't have any clues of the location of the opponent's ships 
     else {
-        return generateCoordinates(10);
+        if (memory.nextSecondaryTarget.length != 0) {
+            const nextArea = memory.nextTarget[genRandom(memory.nextSecondaryTarget.length) - 1];
+            return nextArea;
+        }
+        else 
+             return generateCoordinates(10);
     }
 }
 
 test('Test if  genRandom', () => {
     memory.fillTarget(3, 2)
     expect(decideTarget()).toStrictEqual({x: 3, y: 2})
+})
+
+test('See if decideTarget works ', () => {
+    const player = createPlayer();
+    fillArray(player, 10);
+    player.placeShip(2, 8, 5, false, 'carrier');
+    player.placeShip(3, 7, 4, false, 'battleship');
+    player.placeShip(4, 8, 3, false, 'destroyer');
 })

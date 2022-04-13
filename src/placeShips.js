@@ -155,11 +155,23 @@ const vertThenHoriz = (player, coordinate, ship, length, gridLength) => {
 const placeShipPart = (player, item, ship, length) => {
     const dom_coordinates = player.name + '-' + item.x + ',' + item.y;
     const square = document.getElementById(dom_coordinates)
-    document.getElementById(dom_coordinates).classList.remove('emptySquare')
-    document.getElementById(dom_coordinates).classList.add('occupiedSquare')
+
+
+    if (!player.isComputer) {
+        document.getElementById(dom_coordinates).classList.remove('emptySquare')
+        document.getElementById(dom_coordinates).classList.add('occupiedSquare')
+    }
+    else {
+
+    }
+    //displays ship length on squares
+    /*
     const ship_type = document.createElement('p')
     ship_type.innerHTML = length; 
     square.append(ship_type);
+    */
+
+
     item.occupied = true;
     ship.setPos(item.x, item.y);
 }

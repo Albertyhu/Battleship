@@ -21,6 +21,7 @@ export const createShip = (length, type) => {
     newShip.length = length; 
     newShip.type = type; 
     newShip.isSunk = false;
+    newShip.hasBeenHit = false; 
     newShip.posArray = [];
     newShip.setPos = (x_coor, y_coor) =>{
         newShip.posArray.push({ x: x_coor, y: y_coor, isHit: false })

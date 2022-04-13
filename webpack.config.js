@@ -62,6 +62,10 @@ module.exports = {
                 test: /\.txt$/i,
                 use: 'raw-loader',
             },
+            {
+                test: /\.mp3$/,
+                loader: 'file-loader',
+            },
         ],
     },
     plugins: [
